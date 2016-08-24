@@ -13,10 +13,8 @@ use Doctrine\DBAL\Migrations\OutputWriter;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\AbstractCommand;
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
-use Pimple\Container;
 use Silex\Application;
-use Silex\Api\BootableProviderInterface;
-use Pimple\ServiceProviderInterface;
+use Silex\ServiceProviderInterface;
 use Symfony\Component\Console\Application as Console;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -27,7 +25,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
  *
  * @package Kurl\Silex\Provider
  */
-class DoctrineMigrationsProvider implements ServiceProviderInterface, BootableProviderInterface
+class DoctrineMigrationsProvider implements ServiceProviderInterface
 {
 
     /**
@@ -53,21 +51,21 @@ class DoctrineMigrationsProvider implements ServiceProviderInterface, BootablePr
      * This method should only be used to configure services and parameters.
      * It should not get services.
      *
-     * @param Container $container An Application instance
+     * @param Application $app An Application instance
      */
-    public function register(Container $container)
+    public function register(Application $app)
     {
-        $container['migrations.output_writer'] = new OutputWriter(
+        $app['migrations.output_writer'] = new OutputWriter(
             function ($message) {
                 $output = new ConsoleOutput();
                 $output->writeln($message);
             }
         );
 
-        $container['migrations.directory']  = null;
-        $container['migrations.name']       = 'Migrations';
-        $container['migrations.namespace']  = null;
-        $container['migrations.table_name'] = 'migration_versions';
+        $app['migrations.directory']  = null;
+        $app['migrations.name']       = 'Migrations';
+        $app['migrations.namespace']  = null;
+        $app['migrations.table_name'] = 'migration_versions';
     }
 
     /**
